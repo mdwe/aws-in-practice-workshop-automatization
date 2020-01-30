@@ -1,0 +1,8 @@
+.DS_Store
+*/.DS_Store
+infrastructure/.terraform
+infrastructure/terraform.tfstate
+infrastructure/terraform.tfstate.backup
+infrastructure/tfplan
+infrastructure/lambdas/files
+infrastructure/lambdas/api
