@@ -1,3 +1,7 @@
+# REST API automatization
+
+## Instruction
+
 1. Create *DynamoDB* resource in *Terraform* file - [aws_dynamodb_table](https://www.terraform.io/docs/providers/aws/r/dynamodb_table.html)
     - table name: `product_catalog`
     - hash key: `id` [string]
@@ -32,7 +36,100 @@
         * `environment: dev`
         * `project: aws-in-practise`
 
-6. Init new providers and apply changes with terraform
+    1. Create zip file with python code for **add_product** *Lambda*:
+
+        ```
+        data "archive_file" "add_product_lambda" {
+            type        = "zip"
+            source_file = "${path.module}/lambdas/add_product.py"
+            output_path = "${path.module}/lambdas/files/add_product.zip"
+        }
+        ```
+
+    2. Create role for **add_product** *Lambda*:
+
+        ```
+        data "template_file" "lambda_assume_file" {
+            template = file(
+                "${path.module}/templates/service_assume_role.json",
+            )
+        }
+
+        resource "aws_iam_role" "add_product_role" {
+            name               = "add_product_role"
+            assume_role_policy = data.template_file.lambda_assume_file.rendered
+        }
+        ```
+
+    3. Create confgiguration for **add_product** *Lambda*:
+
+        ```
+        resource "aws_lambda_function" "add_product_lambda" {
+            filename      = data.archive_file.add_product_lambda.output_path
+            function_name = "add_product_lambda"
+            role          = aws_iam_role.add_product_role.arn
+            handler       = "add_product.lambda_handler"
+
+            source_code_hash = filebase64sha256(data.archive_file.add_product_lambda.output_path)
+
+            runtime = "python3.8"
+
+            tags = {
+                environment = "dev"
+                project     = "aws-in-practise"
+            }
+
+            environment {
+                variables = {
+                "product_catalog_table_name" : aws_dynamodb_table.product_catalog.name
+                }
+            }
+        }
+        ```
+
+    4. Create CloudWatch log group:
+
+        ```
+        resource "aws_cloudwatch_log_group" "add_product" {
+            name              = "/aws/lambda/${aws_lambda_function.add_product_lambda.function_name}"
+            retention_in_days = 7
+        }
+        ```
+
+    5. Add permissions for **add_product** *Lambda* to *DynamoDB* and *CloudWatch*:
+
+        ```
+        resource "aws_iam_role_policy" "add_product_policy" {
+        name = "add_product_policy"
+        role = aws_iam_role.add_product_role.id
+
+        policy = <<EOF
+        {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Sid": "Logging",
+                    "Effect": "Allow",
+                    "Action": [
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents"
+                    ],
+            "Resource": "${aws_cloudwatch_log_group.add_product.arn}"
+                },
+            {
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:PutItem"
+            ],
+            "Resource": "${aws_dynamodb_table.product_catalog.arn}"
+            }
+        ]
+        }
+        EOF
+        }
+        ```
+
+6. Init new providers from Terraform files and apply changes with terraform
 
 7. Modify **add_product** *Lambda* code to use environment variables for name of *DynamoDbB* table and pass it as `product_catalog_table_name` from *tf* file.
     - Python:
@@ -78,8 +175,7 @@
         runtime = local.runtime
         ```
 
-9. Apply changes with terraform
-10. Verify solution (output - DynamoDB, logs - CloudWatch) manualy from lambda test with payload: 
+9. Verify solution (output - DynamoDB, logs - CloudWatch) manualy from *Lambda* test with payload: 
 
     ```
     {
@@ -87,7 +183,7 @@
     }
     ```
 
-11. Create API endpoint for **add_product** *Lambda* - [terraform template](https://www.terraform.io/docs/providers/aws/r/api_gateway_integration.html):
+10. Create API endpoint for **add_product** *Lambda* - [terraform template](https://www.terraform.io/docs/providers/aws/r/api_gateway_integration.html):
 
     1. Create API Gateway with name **product_catalog_api**: 
 
@@ -159,7 +255,7 @@
         }
         ```
 
-12. Create new stage - `dev` and deploy API - [terraform template](https://www.terraform.io/docs/providers/aws/r/api_gateway_deployment.html):
+11. Create new stage - `dev` and deploy API - [terraform template](https://www.terraform.io/docs/providers/aws/r/api_gateway_deployment.html):
 
     ```
     resource "aws_api_gateway_deployment" "api-deployment" {
@@ -169,7 +265,7 @@
     }
     ```
 
-13. Display url to invoke API endpoints after changes apply - `output.tf`:  
+12. Display url to invoke API endpoints after changes apply - `output.tf`:  
 
     ```
     output "api-gateway-url" {
@@ -177,14 +273,16 @@
     }
     ```
 
-    
+
+#### AWS Services: 
+*DynamoDB*, *ApiGateway*, *Lambda*, *CloudWatch*, *IAM*    
 
 
 
 ### Tips and hints
-
 - Unlock terraform state: 
 
     ```
     terraform force-unlock LOCK_ID
     ```
+
