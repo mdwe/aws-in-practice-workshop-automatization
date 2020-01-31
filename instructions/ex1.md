@@ -149,9 +149,8 @@
             source_arn = aws_api_gateway_rest_api.product_catalog.execution_arn
         }
         ```
-    6. Apply changes with terraform
 
-    . Test POST API endpoint with *Request Body*:
+    6. Test POST API endpoint with *Request Body*:
 
         ```
         {
@@ -160,9 +159,32 @@
         }
         ```
 
+12. Create new stage - `dev` and deploy API - [terraform template](https://www.terraform.io/docs/providers/aws/r/api_gateway_deployment.html):
+
+    ```
+    resource "aws_api_gateway_deployment" "api-deployment" {
+        depends_on  = ["aws_api_gateway_integration.add_product"]
+        rest_api_id = aws_api_gateway_rest_api.product_catalog.id
+        stage_name  = "dev"
+    }
+    ```
+
+13. Display url to invoke API endpoints after changes apply - `output.tf`:  
+
+    ```
+    output "api-gateway-url" {
+        value = aws_api_gateway_deployment.api-deployment.invoke_url
+    }
+    ```
+
+    
+
+
 
 ### Tips and hints
 
 - Unlock terraform state: 
 
-        terraform force-unlock LOCK_ID
+    ```
+    terraform force-unlock LOCK_ID
+    ```
