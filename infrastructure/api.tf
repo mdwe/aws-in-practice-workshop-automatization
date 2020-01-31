@@ -1,26 +1,26 @@
-resource "aws_api_gateway_rest_api" "product_catalog" { 
-    name        = "product_catalog_api"
-    description = "This is REST API for products"
+resource "aws_api_gateway_rest_api" "product_catalog" {
+  name        = "product_catalog_api"
+  description = "This is REST API for products"
 
-    endpoint_configuration {
-        types = ["REGIONAL"]
-    }
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
 }
 
 resource "aws_api_gateway_resource" "product" {
-    rest_api_id = aws_api_gateway_rest_api.product_catalog.id
-    parent_id   = aws_api_gateway_rest_api.product_catalog.root_resource_id
-    path_part   = "product"
+  rest_api_id = aws_api_gateway_rest_api.product_catalog.id
+  parent_id   = aws_api_gateway_rest_api.product_catalog.root_resource_id
+  path_part   = "product"
 }
 
 ####################################################################################
 # API method - POST - add_product_lambda
 ####################################################################################
 resource "aws_api_gateway_method" "add_product" {
-    rest_api_id   = aws_api_gateway_rest_api.product_catalog.id
-    resource_id   = aws_api_gateway_resource.product.id
-    http_method   = "POST"
-    authorization = "NONE"
+  rest_api_id   = aws_api_gateway_rest_api.product_catalog.id
+  resource_id   = aws_api_gateway_resource.product.id
+  http_method   = "POST"
+  authorization = "NONE"
 }
 
 resource "aws_api_gateway_integration" "add_product" {

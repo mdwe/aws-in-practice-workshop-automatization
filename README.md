@@ -47,7 +47,26 @@
 
     8. Download and install Terraform - `https://www.terraform.io/downloads.html`
 
+    
+    ### Project additional tools
 
+    1. Install project requirements:
+
+        ```
+        pip install -r requirements.txt
+        ```
+
+    2. Install pre-commit hooks
+
+        ```
+        pre-commit install
+        ```
+
+        You can run pre-commmit manually: 
+
+        ```
+        pre-commit run --all-files
+        ```
 
 ## Tools 
 

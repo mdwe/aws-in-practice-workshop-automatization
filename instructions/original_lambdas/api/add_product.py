@@ -1,7 +1,6 @@
 import json
 import boto3
 import uuid
-import os
 
 
 class ProductHandler:
@@ -27,9 +26,7 @@ class ProductHandler:
                 "name": {"S": self.name},
                 "description": {"S": self.description},
             }
-            dynamodb.put_item(
-                TableName=os.environ["product_catalog_table_name"], Item=product
-            )
+            dynamodb.put_item(TableName="ProductCatalog", Item=product)
         except Exception as ex:
             print(ex)
             raise ex

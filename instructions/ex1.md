@@ -23,7 +23,7 @@
     terraform apply tfplan
     ```
 
-5. Create **add_product** *Lambda* with role as Terraform resource - [aws_lambda_function / aws_iam_role / aws_iam_role_policy](https://www.terraform.io/docs/providers/aws/r/lambda_function.html):
+5. Create **add_product** *Lambda* with role as Terraform resource - [aws_lambda_function / aws_iam_role / aws_iam_role_policy](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) - code for **add_product** *Lambda* - `original_lambdas/api/add_product.py` :
     - name: `add_product`
     - runtime: `python3.8` 
     - file: `lambdas/add_product.py`
