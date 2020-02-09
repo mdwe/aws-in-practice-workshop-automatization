@@ -13,6 +13,30 @@ resource "aws_api_gateway_resource" "product" {
   path_part   = "product"
 }
 
+
+####################################################################################
+# API KEYS
+####################################################################################
+resource "aws_api_gateway_api_key" "product_catalog_key" {
+  name = "product_catalog_key_${terraform.workspace}"
+}
+
+resource "aws_api_gateway_usage_plan" "product_catalog_plan" {
+  name = "product_catalog_plan_${terraform.workspace}"
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.product_catalog.id
+    stage  = aws_api_gateway_deployment.api-deployment.stage_name
+  }
+}
+
+resource "aws_api_gateway_usage_plan_key" "api_key" {
+  key_id        = aws_api_gateway_api_key.product_catalog_key.id
+  key_type      = "API_KEY"
+  usage_plan_id = aws_api_gateway_usage_plan.product_catalog_plan.id
+}
+
+
 ####################################################################################
 # API method - POST - add_product_lambda
 ####################################################################################
