@@ -8,12 +8,12 @@ data "template_file" "lambda_assume_file" {
 # ADD PRODUCT LAMBDA
 ####################################################################################
 resource "aws_iam_role" "add_product_role" {
-  name               = "add_product_role"
+  name               = "add_product_role_${terraform.workspace}"
   assume_role_policy = data.template_file.lambda_assume_file.rendered
 }
 
 resource "aws_iam_role_policy" "add_product_policy" {
-  name = "add_product_policy"
+  name = "add_product_policy_${terraform.workspace}"
   role = aws_iam_role.add_product_role.id
 
   policy = <<EOF
@@ -46,12 +46,12 @@ EOF
 # GET PRODUCTS LAMBDA
 ####################################################################################
 resource "aws_iam_role" "get_products_role" {
-  name               = "get_products_role"
+  name               = "get_products_role_${terraform.workspace}"
   assume_role_policy = data.template_file.lambda_assume_file.rendered
 }
 
 resource "aws_iam_role_policy" "get_products_policy" {
-  name = "get_products_policy"
+  name = "get_products_policy_${terraform.workspace}"
   role = aws_iam_role.get_products_role.id
 
   policy = <<EOF

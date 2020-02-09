@@ -6,7 +6,7 @@ data "archive_file" "add_product_lambda" {
 
 resource "aws_lambda_function" "add_product_lambda" {
   filename      = data.archive_file.add_product_lambda.output_path
-  function_name = "add_product_lambda"
+  function_name = "add_product_lambda_${terraform.workspace}"
   role          = aws_iam_role.add_product_role.arn
   handler       = "add_product.lambda_handler"
 

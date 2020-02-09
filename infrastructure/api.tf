@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "product_catalog" {
-  name        = "product_catalog_api"
+  name        = "product_catalog_api_${terraform.workspace}"
   description = "This is REST API for products"
 
   endpoint_configuration {
@@ -47,7 +47,7 @@ resource "aws_lambda_permission" "apigw_add_product_lambda" {
 resource "aws_api_gateway_deployment" "api-deployment" {
   depends_on  = [aws_api_gateway_integration.add_product, aws_api_gateway_integration.get_products]
   rest_api_id = aws_api_gateway_rest_api.product_catalog.id
-  stage_name  = "dev"
+  stage_name  = terraform.workspace
 }
 
 ####################################################################################

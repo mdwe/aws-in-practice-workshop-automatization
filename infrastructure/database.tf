@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "product_catalog" {
-  name           = "product_catalog"
+  name           = "product_catalog_${terraform.workspace}"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
