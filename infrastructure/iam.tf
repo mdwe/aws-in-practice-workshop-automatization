@@ -40,3 +40,41 @@ resource "aws_iam_role_policy" "add_product_policy" {
 }
 EOF
 }
+
+
+####################################################################################
+# GET PRODUCTS LAMBDA
+####################################################################################
+resource "aws_iam_role" "get_products_role" {
+  name               = "get_products_role"
+  assume_role_policy = data.template_file.lambda_assume_file.rendered
+}
+
+resource "aws_iam_role_policy" "get_products_policy" {
+  name = "get_products_policy"
+  role = aws_iam_role.get_products_role.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+		{
+			"Sid": "Logging",
+			"Effect": "Allow",
+			"Action": [
+				"logs:CreateLogStream",
+				"logs:PutLogEvents"
+			],
+      "Resource": "${aws_cloudwatch_log_group.get_products.arn}"
+		},
+	  {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:Scan"
+      ],
+      "Resource": "${aws_dynamodb_table.product_catalog.arn}"
+    }
+  ]
+}
+EOF
+}
