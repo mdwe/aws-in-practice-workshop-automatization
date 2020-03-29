@@ -44,9 +44,7 @@
                 "Account": "1926XXXXXX",
                 "Arn": "arn:aws:iam::1926XXXXXX:root"
             }
-
-    8. Download and install Terraform - `https://www.terraform.io/downloads.html`
-
+    
     
     ### Project additional tools
 
@@ -67,9 +65,26 @@
         ```
         pre-commit run --all-files
         ```
+4. Download and install Terraform - `https://www.terraform.io/downloads.html`, verify version of application with command ( > 0.12.10):
+
+    ```
+    terraform -v
+    ```
+
+
 
 ## Tools 
 
-- **aws-cli** - The AWS Command Line Interface (AWS CLI) is an open source tool that enables you to interact with AWS services using commands in your command-line shell. [Read more](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
-- **awsume** - Awsume is a convenient way to manage session tokens and assume role credentials. [Read more](https://awsu.me)
-- **terraform** - Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently. Terraform can manage existing and popular service providers as well as custom in-house solutions. [Read more](https://www.terraform.io/intro/index.html)
+1. **aws-cli** - The AWS Command Line Interface (AWS CLI) is an open source tool that enables you to interact with AWS services using commands in your command-line shell. [Read more](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
+
+2. **awsume** - Awsume is a convenient way to manage session tokens and assume role credentials. [Read more](https://awsu.me)
+
+3. **terraform** - Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently. Terraform can manage existing and popular service providers as well as custom in-house solutions. [Read more](https://www.terraform.io/intro/index.html)
+
+### Python tools
+
+1. **flake8** - is a Python library that wraps PyFlakes, pycodestyle and Ned Batchelder's McCabe script. It is a great toolkit for checking your codebase against coding style (PEP8), programming errors (like “library imported but unused" and “Undefined name") and to check cyclomatic complexity. [Read more](https://simpleisbetterthancomplex.com/packages/2016/08/05/flake8.html)
+
+2. **black** - is a Python code formatter. By using it, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
+Blackened code looks the same regardless of the project you're reading. Formatting becomes transparent after a while and you can focus on the content instead.
+Black makes code review faster by producing the smallest diffs possible. [Read more](https://pypi.org/project/black/)

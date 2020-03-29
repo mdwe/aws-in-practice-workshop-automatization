@@ -8,3 +8,4 @@ infrastructure/lambdas/files
 infrastructure/lambdas/api
 .mypy_cache
 */terraform.tfstate.d
+.vscode

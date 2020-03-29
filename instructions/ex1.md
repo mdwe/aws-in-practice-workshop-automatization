@@ -7,7 +7,7 @@
     - hash key: `id` [string]
     - tags:
         * `environment: dev`
-        * `project: aws-in-practise`
+        * `project: aws-in-practice`
 
 2. Init terraform project
 
@@ -34,7 +34,7 @@
     - handler: `add_product.lambda_handler`
     - tags:
         * `environment: dev`
-        * `project: aws-in-practise`
+        * `project: aws-in-practice`
 
     1. Create zip file with python code for **add_product** *Lambda*:
 
@@ -76,7 +76,7 @@
 
             tags = {
                 environment = "dev"
-                project     = "aws-in-practise"
+                project     = "aws-in-practice"
             }
 
             environment {
@@ -129,7 +129,7 @@
         }
         ```
 
-6. Init new providers from Terraform files and apply changes with terraform
+6. Init new providers from Terraform files and apply changes with Terraform
 
 7. Modify **add_product** *Lambda* code to use environment variables for name of *DynamoDbB* table and pass it as `product_catalog_table_name` from *tf* file.
     - Python:
@@ -159,7 +159,7 @@
         locals {
             tags = {
                 environment = "dev"
-                project = "aws-in-practise"
+                project = "aws-in-practice"
             }
             runtime = "python3.8"
         }
@@ -198,22 +198,22 @@
         }
         ```
 
-    2. Create API resource - **product** in **product_catalog_api**:
+    2. Create API resource - **products** in **product_catalog_api**:
 
         ```
-        resource "aws_api_gateway_resource" "product" {
+        resource "aws_api_gateway_resource" "products" {
             rest_api_id = aws_api_gateway_rest_api.product_catalog.id
             parent_id   = aws_api_gateway_rest_api.product_catalog.root_resource_id
-            path_part   = "product"
+            path_part   = "products"
         }
         ```
     
-    3. Create API POST method in **product** resource:
+    3. Create API POST method in **products** resource:
 
         ```
         resource "aws_api_gateway_method" "add_product" {
             rest_api_id   = aws_api_gateway_rest_api.product_catalog.id
-            resource_id   = aws_api_gateway_resource.product.id
+            resource_id   = aws_api_gateway_resource.products.id
             http_method   = "POST"
             authorization = "NONE"
         }
@@ -224,7 +224,7 @@
         ```
         resource "aws_api_gateway_integration" "add_product" {
             rest_api_id             = aws_api_gateway_rest_api.product_catalog.id
-            resource_id             = aws_api_gateway_resource.product.id
+            resource_id             = aws_api_gateway_resource.products.id
             http_method             = aws_api_gateway_method.add_product.http_method
             integration_http_method = "POST"
             type                    = "AWS_PROXY"
