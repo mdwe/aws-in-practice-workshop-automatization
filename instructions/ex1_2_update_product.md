@@ -85,7 +85,7 @@
                 {
                     "Effect": "Allow",
                     "Action": [
-                        "dynamodb:UpdateItem"
+                        "dynamodb:PutItem", "dynamodb:GetItem"
                     ],
                     "Resource": "${aws_dynamodb_table.product_catalog.arn}"
                 }
@@ -127,6 +127,7 @@
             resource_id   = aws_api_gateway_resource.product.id
             http_method   = "PUT"
             authorization = "NONE"
+            api_key_required = "true"
 
             request_parameters = {
                 "method.request.path.id" = true

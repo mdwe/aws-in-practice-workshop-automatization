@@ -117,6 +117,7 @@
             resource_id   = aws_api_gateway_resource.products.id
             http_method   = "GET"
             authorization = "NONE"
+            api_key_required = "true"
         }
         ```
 

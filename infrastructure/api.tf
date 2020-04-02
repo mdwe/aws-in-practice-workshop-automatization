@@ -46,10 +46,11 @@ resource "aws_api_gateway_usage_plan_key" "api_key" {
 # API method - POST - add_product_lambda
 ####################################################################################
 resource "aws_api_gateway_method" "add_product" {
-  rest_api_id   = aws_api_gateway_rest_api.product_catalog.id
-  resource_id   = aws_api_gateway_resource.products.id
-  http_method   = "POST"
-  authorization = "NONE"
+  rest_api_id      = aws_api_gateway_rest_api.product_catalog.id
+  resource_id      = aws_api_gateway_resource.products.id
+  http_method      = "POST"
+  authorization    = "NONE"
+  api_key_required = "true"
 }
 
 resource "aws_api_gateway_integration" "add_product" {
@@ -91,10 +92,11 @@ resource "aws_api_gateway_deployment" "api-deployment" {
 # API method - GET - get_products_lambda
 ####################################################################################
 resource "aws_api_gateway_method" "get_products" {
-  rest_api_id   = aws_api_gateway_rest_api.product_catalog.id
-  resource_id   = aws_api_gateway_resource.products.id
-  http_method   = "GET"
-  authorization = "NONE"
+  rest_api_id      = aws_api_gateway_rest_api.product_catalog.id
+  resource_id      = aws_api_gateway_resource.products.id
+  http_method      = "GET"
+  authorization    = "NONE"
+  api_key_required = "true"
 }
 
 resource "aws_api_gateway_integration" "get_products" {
@@ -120,10 +122,11 @@ resource "aws_lambda_permission" "apigw_get_products_lambda" {
 # API method - PUT - update_product_lambda
 ####################################################################################
 resource "aws_api_gateway_method" "update_product" {
-  rest_api_id   = aws_api_gateway_rest_api.product_catalog.id
-  resource_id   = aws_api_gateway_resource.product.id
-  http_method   = "PUT"
-  authorization = "NONE"
+  rest_api_id      = aws_api_gateway_rest_api.product_catalog.id
+  resource_id      = aws_api_gateway_resource.product.id
+  http_method      = "PUT"
+  authorization    = "NONE"
+  api_key_required = "true"
 
   request_parameters = {
     "method.request.path.id" = true

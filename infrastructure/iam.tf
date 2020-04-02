@@ -108,7 +108,7 @@ resource "aws_iam_role_policy" "update_product_policy" {
 	  {
       "Effect": "Allow",
       "Action": [
-        "dynamodb:UpdateItem"
+        "dynamodb:PutItem", "dynamodb:GetItem"
       ],
       "Resource": "${aws_dynamodb_table.product_catalog.arn}"
     }
